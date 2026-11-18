@@ -60,17 +60,16 @@ result.txt
 
 ## Трассировка и отчёт
 
-Из корня проекта соберите программу, затем запустите её под `strace`:
+Из корня проекта запустите программу под `strace`:
 
 ```sh
-make
-cd src
-trace_dir=$(mktemp -d)
-printf '%s\n' "$trace_dir/result.txt" '1 2 3' '10 -5 7' |
-    strace -f -yy -s 160 -o "$trace_dir/ipc-trace.txt" ./parent
-cat "$trace_dir/result.txt"
-printf 'Трасса: %s\n' "$trace_dir/ipc-trace.txt"
+make strace
 ```
+
+Введите имя выходного файла и строки чисел, как при обычном запуске.
+Имя файла результата отсчитывается от каталога `src`. После пустой строки
+или EOF полная трасса находится в `strace.log` в корне проекта. Каждый
+новый запуск `make strace` перезаписывает этот файл.
 
 PDF пересобирается командой `make report` из корня проекта.
 Результаты проверок перед сдачей сохранены в `report/inc/test-results.json`
