@@ -62,6 +62,7 @@
 % terminal – вывод программы, strace и т. п.;
 % \inputterminal{файл} / \inputcode{файл} – то же, но из файла.
 \usepackage{fvextra}
+\usepackage{needspace}
 \fvset{breaklines=true, breakanywhere=true,
        frame=leftline, framerule=1.5pt, framesep=6pt,
        rulecolor=\color{gray!60}, xleftmargin=4pt}
@@ -72,7 +73,7 @@
 % Листинг с подписью сверху:
 %   \begin{listingblock}{Подпись} \begin{code}...\end{code} \end{listingblock}
 \newenvironment{listingblock}[1]
-  {\par\medskip\captionof{listing}{#1}\nopagebreak\vspace{-\topsep}\vspace{-\parskip}}
+  {\par\Needspace{4\baselineskip}\medskip\captionof{listing}{#1}\nopagebreak}
   {\par}
 
 % Приложение: с новой страницы, заголовок «Приложение А. ...»,
