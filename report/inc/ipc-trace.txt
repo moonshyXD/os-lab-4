@@ -1,0 +1,66 @@
+2468937 execve("/mnt/c/Projects/os-labs/lab4/src/parent", ["/mnt/c/Projects/os-labs/lab4/src"...], 0x7ffcb6611e50 /* 86 vars */) = 0
+2468937 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7207d58b1000
+2468937 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3</etc/ld.so.cache>
+2468937 mmap(NULL, 43499, PROT_READ, MAP_PRIVATE, 3</etc/ld.so.cache>, 0) = 0x7207d58a6000
+2468937 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libc.so.6>
+2468937 mmap(NULL, 2174352, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0) = 0x7207d5600000
+2468937 mmap(0x7207d5628000, 1609728, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x28000) = 0x7207d5628000
+2468937 mmap(0x7207d57b1000, 323584, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1b1000) = 0x7207d57b1000
+2468937 mmap(0x7207d5800000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1ff000) = 0x7207d5800000
+2468937 mmap(0x7207d5806000, 52624, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7207d5806000
+2468937 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7207d58a3000
+2468937 munmap(0x7207d58a6000, 43499)   = 0
+2468937 rt_sigprocmask(SIG_BLOCK, [USR1 USR2 CHLD], NULL, 8) = 0
+2468937 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/tmp/lab4-jJfWo7", O_RDWR|O_CREAT|O_EXCL, 0600) = 3</tmp/lab4-jJfWo7>
+2468937 unlink("/tmp/lab4-jJfWo7")      = 0
+2468937 rt_sigtimedwait([USR1 USR2 CHLD],  <unfinished ...>
+2468941 execve("./child", ["./child", "/tmp/lab4-trace-h2em5_wx/result."..., "3", "2468937"], 0x7fffd278e5d8 /* 86 vars */) = 0
+2468941 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7521fdecb000
+2468941 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 4</etc/ld.so.cache>
+2468941 mmap(NULL, 43499, PROT_READ, MAP_PRIVATE, 4</etc/ld.so.cache>, 0) = 0x7521fdec0000
+2468941 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 4</usr/lib/x86_64-linux-gnu/libc.so.6>
+2468941 mmap(NULL, 2174352, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0) = 0x7521fdc00000
+2468941 mmap(0x7521fdc28000, 1609728, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x28000) = 0x7521fdc28000
+2468941 mmap(0x7521fddb1000, 323584, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1b1000) = 0x7521fddb1000
+2468941 mmap(0x7521fde00000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1ff000) = 0x7521fde00000
+2468941 mmap(0x7521fde06000, 52624, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7521fde06000
+2468941 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7521fdebd000
+2468941 munmap(0x7521fdec0000, 43499)   = 0
+2468941 rt_sigprocmask(SIG_BLOCK, [USR1 USR2 CHLD], NULL, 8) = 0
+2468941 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/tmp/lab4-trace-h2em5_wx/result.txt", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 4</tmp/lab4-trace-h2em5_wx/result.txt>
+2468941 kill(2468937, SIGUSR2 <unfinished ...>
+2468937 <... rt_sigtimedwait resumed>{si_signo=SIGUSR2, si_code=SI_USER, si_pid=2468941, si_uid=1000}, NULL, 8) = 12 (SIGUSR2)
+2468941 <... kill resumed>)             = 0
+2468941 rt_sigtimedwait([USR1],  <unfinished ...>
+2468937 rt_sigprocmask(SIG_BLOCK, NULL, [USR1 USR2 CHLD], 8) = 0
+2468937 ftruncate(3</tmp/lab4-jJfWo7>(deleted), 7) = 0
+2468937 mmap(NULL, 7, PROT_READ|PROT_WRITE, MAP_SHARED, 3</tmp/lab4-jJfWo7>(deleted), 0) = 0x7207d58b0000
+2468937 munmap(0x7207d58b0000, 7)       = 0
+2468937 kill(2468941, SIGUSR1)          = 0
+2468941 <... rt_sigtimedwait resumed>{si_signo=SIGUSR1, si_code=SI_USER, si_pid=2468937, si_uid=1000}, {tv_sec=1, tv_nsec=0}, 8) = 10 (SIGUSR1)
+2468937 rt_sigtimedwait([USR1 USR2 CHLD],  <unfinished ...>
+2468941 mmap(NULL, 7, PROT_READ, MAP_SHARED, 3</tmp/lab4-jJfWo7>(deleted), 0) = 0x7521fdeca000
+2468941 munmap(0x7521fdeca000, 7)       = 0
+2468941 kill(2468937, SIGUSR2)          = 0
+2468937 <... rt_sigtimedwait resumed>{si_signo=SIGUSR2, si_code=SI_USER, si_pid=2468941, si_uid=1000}, NULL, 8) = 12 (SIGUSR2)
+2468937 ftruncate(3</tmp/lab4-jJfWo7>(deleted), 9) = 0
+2468941 rt_sigtimedwait([USR1],  <unfinished ...>
+2468937 mmap(NULL, 9, PROT_READ|PROT_WRITE, MAP_SHARED, 3</tmp/lab4-jJfWo7>(deleted), 0) = 0x7207d58b0000
+2468937 munmap(0x7207d58b0000, 9)       = 0
+2468937 kill(2468941, SIGUSR1)          = 0
+2468941 <... rt_sigtimedwait resumed>{si_signo=SIGUSR1, si_code=SI_USER, si_pid=2468937, si_uid=1000}, {tv_sec=1, tv_nsec=0}, 8) = 10 (SIGUSR1)
+2468937 rt_sigtimedwait([USR1 USR2 CHLD],  <unfinished ...>
+2468941 mmap(NULL, 9, PROT_READ, MAP_SHARED, 3</tmp/lab4-jJfWo7>(deleted), 0) = 0x7521fdeca000
+2468941 munmap(0x7521fdeca000, 9)       = 0
+2468941 kill(2468937, SIGUSR2 <unfinished ...>
+2468937 <... rt_sigtimedwait resumed>{si_signo=SIGUSR2, si_code=SI_USER, si_pid=2468941, si_uid=1000}, NULL, 8) = 12 (SIGUSR2)
+2468941 <... kill resumed>)             = 0
+2468937 pselect6(1, [0<pipe:[14341071]>], NULL, NULL, NULL, {sigmask=[USR1 USR2], sigsetsize=8}) = 1 (in [0])
+2468941 rt_sigtimedwait([USR1],  <unfinished ...>
+2468937 ftruncate(3</tmp/lab4-jJfWo7>(deleted), 0) = 0
+2468937 kill(2468941, SIGUSR1)          = 0
+2468941 <... rt_sigtimedwait resumed>{si_signo=SIGUSR1, si_code=SI_USER, si_pid=2468937, si_uid=1000}, {tv_sec=1, tv_nsec=0}, 8) = 10 (SIGUSR1)
+2468937 wait4(2468941,  <unfinished ...>
+2468941 +++ exited with 0 +++
+2468937 <... wait4 resumed>[{WIFEXITED(s) && WEXITSTATUS(s) == 0}], WSTOPPED, NULL) = 2468941
+2468937 +++ exited with 0 +++

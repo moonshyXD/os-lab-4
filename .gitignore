@@ -1,0 +1,7 @@
+# Build artifacts
+src/parent
+src/child
+src/*.o
+report/*.aux
+report/*.log
+report/*.out

@@ -1,0 +1,48 @@
+PASS: positive and negative numbers
+PASS: int boundaries and wide sum
+PASS: one number, no final newline
+PASS: CRLF and whitespace
+PASS: blank line ends input
+PASS: empty input after filename
+PASS: whitespace-only command
+PASS: invalid token then valid line
+PASS: integer outside range
+PASS: numeric suffix
+PASS: NUL in command rejected
+PASS: long command: 100000 integers
+PASS: 1500 commands with changing size
+PASS: missing output directory
+PASS: process failure cases
+PASS: killed child during input
+PASS: stopped child during input
+{
+  "status": "PASS",
+  "count": 23,
+  "cases": [
+    "positive and negative numbers",
+    "int boundaries and wide sum",
+    "one number, no final newline",
+    "CRLF and whitespace",
+    "blank line ends input",
+    "empty input after filename",
+    "whitespace-only command",
+    "invalid token then valid line",
+    "integer outside range",
+    "numeric suffix",
+    "NUL in command rejected",
+    "long command: 100000 integers",
+    "1500 commands with changing size",
+    "missing output directory",
+    "output write failure /dev/full",
+    "invalid filename inputs",
+    "missing child executable",
+    "killed child",
+    "stopped child",
+    "parent death",
+    "killed child during input",
+    "stopped child during input",
+    "no temporary file leak"
+  ],
+  "platform": "Linux 6.6.87.2-microsoft-standard-WSL2",
+  "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+}
