@@ -58,16 +58,24 @@ result.txt
 процесс завершится или остановится, `waitid` проверит его состояние, а `waitpid`
 заберёт статус. Родителю не нужно ждать следующей строки или EOF.
 
-## Проверки и отчёт
+## Трассировка и отчёт
+
+Из корня проекта соберите программу, затем запустите её под `strace`:
 
 ```sh
-make check
-make report
+make
+cd src
+trace_dir=$(mktemp -d)
+calls='%process,read,write,openat,close,unlink,fstat,newfstatat,ftruncate,mmap,munmap,kill,rt_sigprocmask,rt_sigaction,rt_sigtimedwait,pselect6,waitid,pipe,pipe2'
+printf '%s\n' "$trace_dir/result.txt" '1 2 3' '10 -5 7' |
+    strace -f -z -yy -s 160 -e "trace=$calls" -o "$trace_dir/ipc-trace.txt" ./parent
+cat "$trace_dir/result.txt"
+printf 'Трасса: %s\n' "$trace_dir/ipc-trace.txt"
 ```
 
-`make check` требует Python 3 и strace. Сценарии и среда: `report/inc/test-results.json`.
-Дополнительная проверка памяти: `sh tests/sanitizers.sh` (AddressSanitizer и UndefinedBehaviorSanitizer).
-После неё обычная сборка восстанавливается автоматически.
+PDF пересобирается командой `make report` из корня проекта.
+Результаты проверок перед сдачей сохранены в `report/inc/test-results.json`
+и `report/inc/sanitizer-results.json`.
 
 Лог запуска с PID и суммами: `report/inc/demo.txt`.
 Журнал вызовов: `report/inc/ipc-trace.txt`. Ключевые строки тех же PID: `report/inc/ipc-excerpt.txt`.
