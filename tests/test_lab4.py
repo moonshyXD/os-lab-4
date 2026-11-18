@@ -143,23 +143,73 @@ def trace():
     trace_path = artifacts / 'ipc-trace.txt'
     with tempfile.TemporaryDirectory(prefix='lab4-trace-') as directory:
         output = Path(directory) / 'result.txt'
-        run = subprocess.run(['strace', '-f', '-yy', '-o', str(trace_path),
-                              '-e', 'trace=execve,mmap,munmap,ftruncate,kill,rt_sigprocmask,rt_sigtimedwait,pselect6,waitid,wait4,pipe,pipe2,openat,unlink',
-                              str(SRC / 'parent')], cwd=SRC,
+        calls = ('%process,read,write,openat,close,unlink,fstat,newfstatat,'
+                 'ftruncate,mmap,munmap,kill,rt_sigprocmask,rt_sigaction,'
+                 'rt_sigtimedwait,pselect6,waitid,pipe,pipe2')
+        trace_args = ['strace', '-f', '-z', '-yy', '-s', '160', '-e', f'trace={calls}']
+        run = subprocess.run([*trace_args, '-o', str(trace_path), './parent'], cwd=SRC,
                              input=f'{output}\n1 2 3\n10 -5 7\n'.encode(),
                              capture_output=True, timeout=15)
         assert run.returncode == 0, run.stderr
         sums = output.read_text()
         assert sums == '6\n12\n'
-        assert re.fullmatch(rb'parent PID=[0-9]+, child PID=[0-9]+\n', run.stdout)
+        pids = re.fullmatch(rb'parent PID=([0-9]+), child PID=([0-9]+)\n', run.stdout)
+        assert pids is not None
+        parent, child = (pid.decode() for pid in pids.groups())
         demo = (
             f"$ printf '%s\\n' {output} '1 2 3' '10 -5 7' | ./parent\n"
             + run.stdout.decode() + f'$ cat {output}\n' + sums
         )
         (artifacts / 'demo.txt').write_text(demo)
     text = trace_path.read_text()
-    assert 'MAP_SHARED' in text and 'SIGUSR1' in text and 'SIGUSR2' in text
-    assert 'ftruncate(' in text and 'pipe(' not in text and 'pipe2(' not in text
+    transfer = re.search(r'mmap\(NULL, 7, PROT_READ\|PROT_WRITE, MAP_SHARED, (\d+<[^>]+>\(deleted\))',
+                         text)
+    assert transfer is not None, 'parent did not map the unlinked file for writing'
+    shared_fd = re.escape(transfer[1])
+    result_file = re.escape(str(output))
+    # strace -z prints completed calls, so check order separately for each PID.
+    events = [
+        rf'{parent} +rt_sigprocmask\(SIG_BLOCK, \[USR1 USR2 CHLD\]',
+        rf'{parent} +openat\(.*O_RDWR\|O_CREAT\|O_EXCL, 0600',
+        rf'{parent} +unlink\("/tmp/lab4-[^"]+"\) += 0',
+        rf'{parent} +(clone3?|fork)\(.* = {child}$',
+        rf'{child} +execve\("\./child".* = 0$',
+        rf'{child} +openat\(.*"{result_file}".*O_WRONLY\|O_CREAT\|O_TRUNC',
+        rf'{child} +kill\({parent}, SIGUSR2\) += 0',
+        rf'{parent} +rt_sigtimedwait\(.*si_signo=SIGUSR2.*si_pid={child}\b',
+        rf'{parent} +ftruncate\({shared_fd}, 7\) += 0',
+        rf'{parent} +mmap\(NULL, 7, PROT_READ\|PROT_WRITE, MAP_SHARED, {shared_fd}, 0\)',
+        rf'{parent} +munmap\(.*?, 7\) += 0',
+        rf'{parent} +kill\({child}, SIGUSR1\) += 0',
+        rf'{child} +rt_sigtimedwait\(.*si_signo=SIGUSR1.*si_pid={parent}\b',
+        rf'{child} +(fstat|newfstatat)\({shared_fd},',
+        rf'{child} +mmap\(NULL, 7, PROT_READ, MAP_SHARED, {shared_fd}, 0\)',
+        rf'{child} +write\(\d+<{result_file}>, "6\\n", 2\) += 2',
+        rf'{child} +munmap\(.*?, 7\) += 0',
+        rf'{child} +kill\({parent}, SIGUSR2\) += 0',
+        rf'{parent} +rt_sigtimedwait\(.*si_signo=SIGUSR2.*si_pid={child}\b',
+        rf'{parent} +ftruncate\({shared_fd}, 9\) += 0',
+        rf'{child} +write\(\d+<{result_file}>, "12\\n", 3\) += 3',
+        rf'{parent} +ftruncate\({shared_fd}, 0\) += 0',
+        rf'{parent} +kill\({child}, SIGUSR1\) += 0',
+        rf'{child} +rt_sigtimedwait\(.*si_signo=SIGUSR1.*si_pid={parent}\b',
+        rf'{child} +(fstat|newfstatat)\({shared_fd},.*st_size=0',
+        rf'{child} +close\(\d+<{result_file}>\) += 0',
+        rf'{child} +close\({shared_fd}\) += 0',
+        rf'{parent} +wait4\({child}, .*WEXITSTATUS\(s\) == 0.* = {child}$',
+        rf'{parent} +close\({shared_fd}\) += 0',
+    ]
+    lines = text.splitlines()
+    cursor = {parent: 0, child: 0}
+    excerpts = []
+    for event in events:
+        pid = event.split(' ', 1)[0]
+        match = next((i for i in range(cursor[pid], len(lines)) if re.search(event, lines[i])), None)
+        assert match is not None, f'missing or out-of-order syscall: {event}'
+        cursor[pid] = match + 1
+        excerpts.append(match)
+    assert not re.search(r'\bpipe2?\(', text), 'the programs created a pipe'
+    (artifacts / 'ipc-excerpt.txt').write_text(''.join(lines[i] + '\n' for i in sorted(excerpts)))
     RESULTS.append('strace: mmap/signals, no pipe')
     print('PASS: IPC trace', flush=True)
 

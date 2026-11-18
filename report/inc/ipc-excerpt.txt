@@ -1,0 +1,29 @@
+2508523 rt_sigprocmask(SIG_BLOCK, [USR1 USR2 CHLD], NULL, 8) = 0
+2508523 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/tmp/lab4-Y7wsR0", O_RDWR|O_CREAT|O_EXCL, 0600) = 3</tmp/lab4-Y7wsR0>
+2508523 unlink("/tmp/lab4-Y7wsR0")      = 0
+2508523 clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x72bec975ba10) = 2508524
+2508524 execve("./child", ["./child", "/tmp/lab4-trace-5cosremw/result.txt", "3", "2508523"], 0x7ffcf432f618 /* 83 vars */) = 0
+2508524 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/tmp/lab4-trace-5cosremw/result.txt", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 4</tmp/lab4-trace-5cosremw/result.txt>
+2508524 kill(2508523, SIGUSR2)          = 0
+2508523 rt_sigtimedwait([USR1 USR2 CHLD], {si_signo=SIGUSR2, si_code=SI_USER, si_pid=2508524, si_uid=1000}, NULL, 8) = 12 (SIGUSR2)
+2508523 ftruncate(3</tmp/lab4-Y7wsR0>(deleted), 7) = 0
+2508523 mmap(NULL, 7, PROT_READ|PROT_WRITE, MAP_SHARED, 3</tmp/lab4-Y7wsR0>(deleted), 0) = 0x72bec9768000
+2508523 munmap(0x72bec9768000, 7)       = 0
+2508523 kill(2508524, SIGUSR1)          = 0
+2508524 rt_sigtimedwait([USR1], {si_signo=SIGUSR1, si_code=SI_USER, si_pid=2508523, si_uid=1000}, {tv_sec=1, tv_nsec=0}, 8) = 10 (SIGUSR1)
+2508524 fstat(3</tmp/lab4-Y7wsR0>(deleted), {st_mode=S_IFREG|0600, st_size=7, ...}) = 0
+2508524 mmap(NULL, 7, PROT_READ, MAP_SHARED, 3</tmp/lab4-Y7wsR0>(deleted), 0) = 0x7af89bc5c000
+2508524 write(4</tmp/lab4-trace-5cosremw/result.txt>, "6\n", 2) = 2
+2508524 munmap(0x7af89bc5c000, 7)       = 0
+2508523 rt_sigtimedwait([USR1 USR2 CHLD], {si_signo=SIGUSR2, si_code=SI_USER, si_pid=2508524, si_uid=1000}, NULL, 8) = 12 (SIGUSR2)
+2508524 kill(2508523, SIGUSR2)          = 0
+2508523 ftruncate(3</tmp/lab4-Y7wsR0>(deleted), 9) = 0
+2508524 write(4</tmp/lab4-trace-5cosremw/result.txt>, "12\n", 3) = 3
+2508523 ftruncate(3</tmp/lab4-Y7wsR0>(deleted), 0) = 0
+2508523 kill(2508524, SIGUSR1)          = 0
+2508524 rt_sigtimedwait([USR1], {si_signo=SIGUSR1, si_code=SI_USER, si_pid=2508523, si_uid=1000}, {tv_sec=1, tv_nsec=0}, 8) = 10 (SIGUSR1)
+2508524 fstat(3</tmp/lab4-Y7wsR0>(deleted), {st_mode=S_IFREG|0600, st_size=0, ...}) = 0
+2508524 close(4</tmp/lab4-trace-5cosremw/result.txt>) = 0
+2508524 close(3</tmp/lab4-Y7wsR0>(deleted)) = 0
+2508523 wait4(2508524, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], WSTOPPED, NULL) = 2508524
+2508523 close(3</tmp/lab4-Y7wsR0>(deleted)) = 0

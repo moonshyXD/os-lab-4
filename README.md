@@ -70,7 +70,8 @@ make report
 После неё обычная сборка восстанавливается автоматически.
 
 Лог запуска с PID и суммами: `report/inc/demo.txt`.
-Полная трассировка: `report/inc/ipc-trace.txt`. Отчёт: `report/report.pdf`;
+Журнал вызовов: `report/inc/ipc-trace.txt`. Ключевые строки тех же PID: `report/inc/ipc-excerpt.txt`.
+Отчёт с пояснениями к трассе: `report/report.pdf`;
 редактируемый исходник: `report/report.tex`.
 
 Сборка: GCC 13.3.0, Linux x86_64 / WSL2. Проверки на другой ОС не выполнялись.

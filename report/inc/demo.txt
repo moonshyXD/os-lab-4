@@ -1,5 +1,5 @@
-$ printf '%s\n' /tmp/lab4-trace-h2em5_wx/result.txt '1 2 3' '10 -5 7' | ./parent
-parent PID=2468937, child PID=2468941
-$ cat /tmp/lab4-trace-h2em5_wx/result.txt
+$ printf '%s\n' /tmp/lab4-trace-5cosremw/result.txt '1 2 3' '10 -5 7' | ./parent
+parent PID=2508523, child PID=2508524
+$ cat /tmp/lab4-trace-5cosremw/result.txt
 6
 12
