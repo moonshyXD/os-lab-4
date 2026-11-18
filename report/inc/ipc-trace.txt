@@ -1,85 +1,138 @@
-2508523 execve("./parent", ["./parent"], 0x7ffcf14e5008 /* 83 vars */) = 0
-2508523 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x72bec9769000
-2508523 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3</etc/ld.so.cache>
-2508523 fstat(3</etc/ld.so.cache>, {st_mode=S_IFREG|0644, st_size=43499, ...}) = 0
-2508523 mmap(NULL, 43499, PROT_READ, MAP_PRIVATE, 3</etc/ld.so.cache>, 0) = 0x72bec975e000
-2508523 close(3</etc/ld.so.cache>)      = 0
-2508523 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libc.so.6>
-2508523 read(3</usr/lib/x86_64-linux-gnu/libc.so.6>, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\220\243\2\0\0\0\0\0@\0\0\0\0\0\0\0\20n \0\0\0\0\0\0\0\0\0@\08\0\16\0@\0@\0?\0\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0\20\3\0\0\0\0\0\0\20\3\0\0\0\0\0\0\10\0\0\0\0\0\0\0\3\0\0\0\4\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\34\0\0\0\0\0\0\0"..., 832) = 832
-2508523 fstat(3</usr/lib/x86_64-linux-gnu/libc.so.6>, {st_mode=S_IFREG|0755, st_size=2129424, ...}) = 0
-2508523 mmap(NULL, 2174352, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0) = 0x72bec9400000
-2508523 mmap(0x72bec9428000, 1609728, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x28000) = 0x72bec9428000
-2508523 mmap(0x72bec95b1000, 323584, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1b1000) = 0x72bec95b1000
-2508523 mmap(0x72bec9600000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1ff000) = 0x72bec9600000
-2508523 mmap(0x72bec9606000, 52624, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x72bec9606000
-2508523 close(3</usr/lib/x86_64-linux-gnu/libc.so.6>) = 0
-2508523 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x72bec975b000
-2508523 munmap(0x72bec975e000, 43499)   = 0
-2508523 read(0<pipe:[14396144]>, "/tmp/lab4-trace-5cosremw/result.txt\n1 2 3\n10 -5 7\n", 4096) = 50
-2508523 rt_sigprocmask(SIG_BLOCK, [USR1 USR2 CHLD], NULL, 8) = 0
-2508523 rt_sigaction(SIGCHLD, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x72bec9445330}, NULL, 8) = 0
-2508523 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/tmp/lab4-Y7wsR0", O_RDWR|O_CREAT|O_EXCL, 0600) = 3</tmp/lab4-Y7wsR0>
-2508523 unlink("/tmp/lab4-Y7wsR0")      = 0
-2508523 clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x72bec975ba10) = 2508524
-2508524 execve("./child", ["./child", "/tmp/lab4-trace-5cosremw/result.txt", "3", "2508523"], 0x7ffcf432f618 /* 83 vars */) = 0
-2508524 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7af89bc5d000
-2508524 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 4</etc/ld.so.cache>
-2508524 fstat(4</etc/ld.so.cache>, {st_mode=S_IFREG|0644, st_size=43499, ...}) = 0
-2508524 mmap(NULL, 43499, PROT_READ, MAP_PRIVATE, 4</etc/ld.so.cache>, 0) = 0x7af89bc52000
-2508524 close(4</etc/ld.so.cache>)      = 0
-2508524 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 4</usr/lib/x86_64-linux-gnu/libc.so.6>
-2508524 read(4</usr/lib/x86_64-linux-gnu/libc.so.6>, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\220\243\2\0\0\0\0\0@\0\0\0\0\0\0\0\20n \0\0\0\0\0\0\0\0\0@\08\0\16\0@\0@\0?\0\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0\20\3\0\0\0\0\0\0\20\3\0\0\0\0\0\0\10\0\0\0\0\0\0\0\3\0\0\0\4\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\34\0\0\0\0\0\0\0"..., 832) = 832
-2508524 fstat(4</usr/lib/x86_64-linux-gnu/libc.so.6>, {st_mode=S_IFREG|0755, st_size=2129424, ...}) = 0
-2508524 mmap(NULL, 2174352, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0) = 0x7af89ba00000
-2508524 mmap(0x7af89ba28000, 1609728, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x28000) = 0x7af89ba28000
-2508524 mmap(0x7af89bbb1000, 323584, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1b1000) = 0x7af89bbb1000
-2508524 mmap(0x7af89bc00000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1ff000) = 0x7af89bc00000
-2508524 mmap(0x7af89bc06000, 52624, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7af89bc06000
-2508524 close(4</usr/lib/x86_64-linux-gnu/libc.so.6>) = 0
-2508524 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7af89bc4f000
-2508524 munmap(0x7af89bc52000, 43499)   = 0
-2508524 rt_sigprocmask(SIG_BLOCK, [USR1 USR2 CHLD], NULL, 8) = 0
-2508524 rt_sigaction(SIGCHLD, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x7af89ba45330}, NULL, 8) = 0
-2508524 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/tmp/lab4-trace-5cosremw/result.txt", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 4</tmp/lab4-trace-5cosremw/result.txt>
-2508524 kill(2508523, SIGUSR2)          = 0
-2508523 rt_sigtimedwait([USR1 USR2 CHLD], {si_signo=SIGUSR2, si_code=SI_USER, si_pid=2508524, si_uid=1000}, NULL, 8) = 12 (SIGUSR2)
-2508523 rt_sigaction(SIGCHLD, {sa_handler=0x5de098082d8e, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x72bec9445330}, NULL, 8) = 0
-2508523 rt_sigprocmask(SIG_BLOCK, NULL, [USR1 USR2 CHLD], 8) = 0
-2508523 rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x72bec9445330}, NULL, 8) = 0
-2508523 fstat(1<pipe:[14396145]>, {st_mode=S_IFIFO|0600, st_size=0, ...}) = 0
-2508523 write(1<pipe:[14396145]>, "parent PID=2508523, child PID=2508524\n", 38) = 38
-2508523 ftruncate(3</tmp/lab4-Y7wsR0>(deleted), 7) = 0
-2508523 mmap(NULL, 7, PROT_READ|PROT_WRITE, MAP_SHARED, 3</tmp/lab4-Y7wsR0>(deleted), 0) = 0x72bec9768000
-2508523 munmap(0x72bec9768000, 7)       = 0
-2508523 kill(2508524, SIGUSR1)          = 0
-2508524 rt_sigtimedwait([USR1], {si_signo=SIGUSR1, si_code=SI_USER, si_pid=2508523, si_uid=1000}, {tv_sec=1, tv_nsec=0}, 8) = 10 (SIGUSR1)
-2508524 fstat(3</tmp/lab4-Y7wsR0>(deleted), {st_mode=S_IFREG|0600, st_size=7, ...}) = 0
-2508524 mmap(NULL, 7, PROT_READ, MAP_SHARED, 3</tmp/lab4-Y7wsR0>(deleted), 0) = 0x7af89bc5c000
-2508524 fstat(4</tmp/lab4-trace-5cosremw/result.txt>, {st_mode=S_IFREG|0644, st_size=0, ...}) = 0
-2508524 write(4</tmp/lab4-trace-5cosremw/result.txt>, "6\n", 2) = 2
-2508524 munmap(0x7af89bc5c000, 7)       = 0
-2508523 rt_sigtimedwait([USR1 USR2 CHLD], {si_signo=SIGUSR2, si_code=SI_USER, si_pid=2508524, si_uid=1000}, NULL, 8) = 12 (SIGUSR2)
-2508524 kill(2508523, SIGUSR2)          = 0
-2508523 ftruncate(3</tmp/lab4-Y7wsR0>(deleted), 9) = 0
-2508523 mmap(NULL, 9, PROT_READ|PROT_WRITE, MAP_SHARED, 3</tmp/lab4-Y7wsR0>(deleted), 0) = 0x72bec9768000
-2508523 munmap(0x72bec9768000, 9)       = 0
-2508523 kill(2508524, SIGUSR1)          = 0
-2508524 rt_sigtimedwait([USR1], {si_signo=SIGUSR1, si_code=SI_USER, si_pid=2508523, si_uid=1000}, {tv_sec=1, tv_nsec=0}, 8) = 10 (SIGUSR1)
-2508524 fstat(3</tmp/lab4-Y7wsR0>(deleted), {st_mode=S_IFREG|0600, st_size=9, ...}) = 0
-2508524 mmap(NULL, 9, PROT_READ, MAP_SHARED, 3</tmp/lab4-Y7wsR0>(deleted), 0) = 0x7af89bc5c000
-2508524 write(4</tmp/lab4-trace-5cosremw/result.txt>, "12\n", 3) = 3
-2508524 munmap(0x7af89bc5c000, 9)       = 0
-2508523 rt_sigtimedwait([USR1 USR2 CHLD], {si_signo=SIGUSR2, si_code=SI_USER, si_pid=2508524, si_uid=1000}, NULL, 8) = 12 (SIGUSR2)
-2508524 kill(2508523, SIGUSR2)          = 0
-2508523 pselect6(1, [0<pipe:[14396144]>], NULL, NULL, NULL, {sigmask=[USR1 USR2], sigsetsize=8}) = 1 (in [0])
-2508523 read(0<pipe:[14396144]>, "", 4096) = 0
-2508523 ftruncate(3</tmp/lab4-Y7wsR0>(deleted), 0) = 0
-2508523 kill(2508524, SIGUSR1)          = 0
-2508524 rt_sigtimedwait([USR1], {si_signo=SIGUSR1, si_code=SI_USER, si_pid=2508523, si_uid=1000}, {tv_sec=1, tv_nsec=0}, 8) = 10 (SIGUSR1)
-2508524 fstat(3</tmp/lab4-Y7wsR0>(deleted), {st_mode=S_IFREG|0600, st_size=0, ...}) = 0
-2508524 close(4</tmp/lab4-trace-5cosremw/result.txt>) = 0
-2508524 close(3</tmp/lab4-Y7wsR0>(deleted)) = 0
-2508524 +++ exited with 0 +++
-2508523 wait4(2508524, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], WSTOPPED, NULL) = 2508524
-2508523 close(3</tmp/lab4-Y7wsR0>(deleted)) = 0
-2508523 +++ exited with 0 +++
+2704543 execve("./parent", ["./parent"], 0x7ffd73b31aa0 /* 83 vars */) = 0
+2704543 brk(NULL)                       = 0x5ac7a6c1a000
+2704543 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x74e1c8a3b000
+2704543 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+2704543 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3</etc/ld.so.cache>
+2704543 fstat(3</etc/ld.so.cache>, {st_mode=S_IFREG|0644, st_size=43499, ...}) = 0
+2704543 mmap(NULL, 43499, PROT_READ, MAP_PRIVATE, 3</etc/ld.so.cache>, 0) = 0x74e1c8a30000
+2704543 close(3</etc/ld.so.cache>)      = 0
+2704543 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libc.so.6>
+2704543 read(3</usr/lib/x86_64-linux-gnu/libc.so.6>, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\220\243\2\0\0\0\0\0@\0\0\0\0\0\0\0\20n \0\0\0\0\0\0\0\0\0@\08\0\16\0@\0@\0?\0\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0\20\3\0\0\0\0\0\0\20\3\0\0\0\0\0\0\10\0\0\0\0\0\0\0\3\0\0\0\4\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\34\0\0\0\0\0\0\0"..., 832) = 832
+2704543 pread64(3</usr/lib/x86_64-linux-gnu/libc.so.6>, "\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0\20\3\0\0\0\0\0\0\20\3\0\0\0\0\0\0\10\0\0\0\0\0\0\0\3\0\0\0\4\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\34\0\0\0\0\0\0\0\34\0\0\0\0\0\0\0\20\0\0\0\0\0\0\0\1\0\0\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\220s\2\0\0\0\0\0\220s\2\0\0\0\0\0"..., 784, 64) = 784
+2704543 fstat(3</usr/lib/x86_64-linux-gnu/libc.so.6>, {st_mode=S_IFREG|0755, st_size=2129424, ...}) = 0
+2704543 pread64(3</usr/lib/x86_64-linux-gnu/libc.so.6>, "\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0\20\3\0\0\0\0\0\0\20\3\0\0\0\0\0\0\10\0\0\0\0\0\0\0\3\0\0\0\4\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\34\0\0\0\0\0\0\0\34\0\0\0\0\0\0\0\20\0\0\0\0\0\0\0\1\0\0\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\220s\2\0\0\0\0\0\220s\2\0\0\0\0\0"..., 784, 64) = 784
+2704543 mmap(NULL, 2174352, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0) = 0x74e1c8800000
+2704543 mmap(0x74e1c8828000, 1609728, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x28000) = 0x74e1c8828000
+2704543 mmap(0x74e1c89b1000, 323584, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1b1000) = 0x74e1c89b1000
+2704543 mmap(0x74e1c8a00000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1ff000) = 0x74e1c8a00000
+2704543 mmap(0x74e1c8a06000, 52624, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x74e1c8a06000
+2704543 close(3</usr/lib/x86_64-linux-gnu/libc.so.6>) = 0
+2704543 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x74e1c8a2d000
+2704543 arch_prctl(ARCH_SET_FS, 0x74e1c8a2d740) = 0
+2704543 set_tid_address(0x74e1c8a2da10) = 2704543
+2704543 set_robust_list(0x74e1c8a2da20, 24) = 0
+2704543 rseq(0x74e1c8a2e060, 0x20, 0, 0x53053053) = 0
+2704543 mprotect(0x74e1c8a00000, 16384, PROT_READ) = 0
+2704543 mprotect(0x5ac78f37d000, 4096, PROT_READ) = 0
+2704543 mprotect(0x74e1c8a73000, 8192, PROT_READ) = 0
+2704543 prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+2704543 munmap(0x74e1c8a30000, 43499)   = 0
+2704543 read(0<pipe:[14636364]>, "/tmp/tmpuvahnvk3/result.txt\n1 2 3\n10 -5 7\n", 4096) = 42
+2704543 getrandom("\xea\xfc\xb8\x41\xd7\xd0\x3d\xcb", 8, GRND_NONBLOCK) = 8
+2704543 brk(NULL)                       = 0x5ac7a6c1a000
+2704543 brk(0x5ac7a6c3b000)             = 0x5ac7a6c3b000
+2704543 rt_sigprocmask(SIG_BLOCK, [USR1 USR2 CHLD], NULL, 8) = 0
+2704543 rt_sigaction(SIGCHLD, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x74e1c8845330}, NULL, 8) = 0
+2704543 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/tmp/lab4-wJqD0A", O_RDWR|O_CREAT|O_EXCL, 0600) = 3</tmp/lab4-wJqD0A>
+2704543 unlink("/tmp/lab4-wJqD0A")      = 0
+2704543 getpid()                        = 2704543
+2704543 clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x74e1c8a2da10) = 2705303
+2704543 rt_sigtimedwait([USR1 USR2 CHLD],  <unfinished ...>
+2705303 set_robust_list(0x74e1c8a2da20, 24) = 0
+2705303 execve("./child", ["./child", "/tmp/tmpuvahnvk3/result.txt", "3", "2704543"], 0x7ffd91a260d8 /* 83 vars */) = 0
+2705303 brk(NULL)                       = 0x57eb0be1d000
+2705303 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x73c0b82cf000
+2705303 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+2705303 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 4</etc/ld.so.cache>
+2705303 fstat(4</etc/ld.so.cache>, {st_mode=S_IFREG|0644, st_size=43499, ...}) = 0
+2705303 mmap(NULL, 43499, PROT_READ, MAP_PRIVATE, 4</etc/ld.so.cache>, 0) = 0x73c0b82c4000
+2705303 close(4</etc/ld.so.cache>)      = 0
+2705303 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 4</usr/lib/x86_64-linux-gnu/libc.so.6>
+2705303 read(4</usr/lib/x86_64-linux-gnu/libc.so.6>, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\220\243\2\0\0\0\0\0@\0\0\0\0\0\0\0\20n \0\0\0\0\0\0\0\0\0@\08\0\16\0@\0@\0?\0\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0\20\3\0\0\0\0\0\0\20\3\0\0\0\0\0\0\10\0\0\0\0\0\0\0\3\0\0\0\4\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\34\0\0\0\0\0\0\0"..., 832) = 832
+2705303 pread64(4</usr/lib/x86_64-linux-gnu/libc.so.6>, "\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0\20\3\0\0\0\0\0\0\20\3\0\0\0\0\0\0\10\0\0\0\0\0\0\0\3\0\0\0\4\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\34\0\0\0\0\0\0\0\34\0\0\0\0\0\0\0\20\0\0\0\0\0\0\0\1\0\0\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\220s\2\0\0\0\0\0\220s\2\0\0\0\0\0"..., 784, 64) = 784
+2705303 fstat(4</usr/lib/x86_64-linux-gnu/libc.so.6>, {st_mode=S_IFREG|0755, st_size=2129424, ...}) = 0
+2705303 pread64(4</usr/lib/x86_64-linux-gnu/libc.so.6>, "\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0\20\3\0\0\0\0\0\0\20\3\0\0\0\0\0\0\10\0\0\0\0\0\0\0\3\0\0\0\4\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\340w\35\0\0\0\0\0\34\0\0\0\0\0\0\0\34\0\0\0\0\0\0\0\20\0\0\0\0\0\0\0\1\0\0\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\220s\2\0\0\0\0\0\220s\2\0\0\0\0\0"..., 784, 64) = 784
+2705303 mmap(NULL, 2174352, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0) = 0x73c0b8000000
+2705303 mmap(0x73c0b8028000, 1609728, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x28000) = 0x73c0b8028000
+2705303 mmap(0x73c0b81b1000, 323584, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1b1000) = 0x73c0b81b1000
+2705303 mmap(0x73c0b8200000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1ff000) = 0x73c0b8200000
+2705303 mmap(0x73c0b8206000, 52624, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x73c0b8206000
+2705303 close(4</usr/lib/x86_64-linux-gnu/libc.so.6>) = 0
+2705303 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x73c0b82c1000
+2705303 arch_prctl(ARCH_SET_FS, 0x73c0b82c1740) = 0
+2705303 set_tid_address(0x73c0b82c1a10) = 2705303
+2705303 set_robust_list(0x73c0b82c1a20, 24) = 0
+2705303 rseq(0x73c0b82c2060, 0x20, 0, 0x53053053) = 0
+2705303 mprotect(0x73c0b8200000, 16384, PROT_READ) = 0
+2705303 mprotect(0x57eb0b9c9000, 4096, PROT_READ) = 0
+2705303 mprotect(0x73c0b8307000, 8192, PROT_READ) = 0
+2705303 prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+2705303 munmap(0x73c0b82c4000, 43499)   = 0
+2705303 rt_sigprocmask(SIG_BLOCK, [USR1 USR2 CHLD], NULL, 8) = 0
+2705303 rt_sigaction(SIGCHLD, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x73c0b8045330}, NULL, 8) = 0
+2705303 getrandom("\xc8\x8c\x44\x6f\xad\x01\x12\xfb", 8, GRND_NONBLOCK) = 8
+2705303 brk(NULL)                       = 0x57eb0be1d000
+2705303 brk(0x57eb0be3e000)             = 0x57eb0be3e000
+2705303 openat(AT_FDCWD</mnt/c/Projects/os-labs/lab4/src>, "/tmp/tmpuvahnvk3/result.txt", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 4</tmp/tmpuvahnvk3/result.txt>
+2705303 getppid()                       = 2704543
+2705303 kill(2704543, SIGUSR2)          = 0
+2704543 <... rt_sigtimedwait resumed>{si_signo=SIGUSR2, si_code=SI_USER, si_pid=2705303, si_uid=1000}, NULL, 8) = 12 (SIGUSR2)
+2705303 getppid( <unfinished ...>
+2704543 rt_sigaction(SIGCHLD, {sa_handler=0x5ac78f37ad8e, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x74e1c8845330},  <unfinished ...>
+2705303 <... getppid resumed>)          = 2704543
+2704543 <... rt_sigaction resumed>NULL, 8) = 0
+2705303 rt_sigtimedwait([USR1],  <unfinished ...>
+2704543 rt_sigprocmask(SIG_BLOCK, NULL, [USR1 USR2 CHLD], 8) = 0
+2704543 rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER, sa_restorer=0x74e1c8845330}, NULL, 8) = 0
+2704543 fstat(1<pipe:[14636365]>, {st_mode=S_IFIFO|0600, st_size=0, ...}) = 0
+2704543 write(1<pipe:[14636365]>, "parent PID=2704543, child PID=2705303\n", 38) = 38
+2704543 ftruncate(3</tmp/lab4-wJqD0A>(deleted), 7) = 0
+2704543 mmap(NULL, 7, PROT_READ|PROT_WRITE, MAP_SHARED, 3</tmp/lab4-wJqD0A>(deleted), 0) = 0x74e1c8a3a000
+2704543 munmap(0x74e1c8a3a000, 7)       = 0
+2704543 kill(2705303, SIGUSR1)          = 0
+2705303 <... rt_sigtimedwait resumed>{si_signo=SIGUSR1, si_code=SI_USER, si_pid=2704543, si_uid=1000}, {tv_sec=1, tv_nsec=0}, 8) = 10 (SIGUSR1)
+2704543 rt_sigtimedwait([USR1 USR2 CHLD],  <unfinished ...>
+2705303 fstat(3</tmp/lab4-wJqD0A>(deleted), {st_mode=S_IFREG|0600, st_size=7, ...}) = 0
+2705303 mmap(NULL, 7, PROT_READ, MAP_SHARED, 3</tmp/lab4-wJqD0A>(deleted), 0) = 0x73c0b82ce000
+2705303 fstat(4</tmp/tmpuvahnvk3/result.txt>, {st_mode=S_IFREG|0644, st_size=0, ...}) = 0
+2705303 write(4</tmp/tmpuvahnvk3/result.txt>, "6\n", 2) = 2
+2705303 munmap(0x73c0b82ce000, 7)       = 0
+2705303 getppid()                       = 2704543
+2705303 kill(2704543, SIGUSR2 <unfinished ...>
+2704543 <... rt_sigtimedwait resumed>{si_signo=SIGUSR2, si_code=SI_USER, si_pid=2705303, si_uid=1000}, NULL, 8) = 12 (SIGUSR2)
+2705303 <... kill resumed>)             = 0
+2704543 ftruncate(3</tmp/lab4-wJqD0A>(deleted), 9 <unfinished ...>
+2705303 getppid( <unfinished ...>
+2704543 <... ftruncate resumed>)        = 0
+2705303 <... getppid resumed>)          = 2704543
+2704543 mmap(NULL, 9, PROT_READ|PROT_WRITE, MAP_SHARED, 3</tmp/lab4-wJqD0A>(deleted), 0 <unfinished ...>
+2705303 rt_sigtimedwait([USR1],  <unfinished ...>
+2704543 <... mmap resumed>)             = 0x74e1c8a3a000
+2704543 munmap(0x74e1c8a3a000, 9)       = 0
+2704543 kill(2705303, SIGUSR1)          = 0
+2705303 <... rt_sigtimedwait resumed>{si_signo=SIGUSR1, si_code=SI_USER, si_pid=2704543, si_uid=1000}, {tv_sec=1, tv_nsec=0}, 8) = 10 (SIGUSR1)
+2704543 rt_sigtimedwait([USR1 USR2 CHLD],  <unfinished ...>
+2705303 fstat(3</tmp/lab4-wJqD0A>(deleted), {st_mode=S_IFREG|0600, st_size=9, ...}) = 0
+2705303 mmap(NULL, 9, PROT_READ, MAP_SHARED, 3</tmp/lab4-wJqD0A>(deleted), 0) = 0x73c0b82ce000
+2705303 write(4</tmp/tmpuvahnvk3/result.txt>, "12\n", 3) = 3
+2705303 munmap(0x73c0b82ce000, 9)       = 0
+2705303 getppid()                       = 2704543
+2705303 kill(2704543, SIGUSR2)          = 0
+2705303 getppid()                       = 2704543
+2705303 rt_sigtimedwait([USR1],  <unfinished ...>
+2704543 <... rt_sigtimedwait resumed>{si_signo=SIGUSR2, si_code=SI_USER, si_pid=2705303, si_uid=1000}, NULL, 8) = 12 (SIGUSR2)
+2704543 pselect6(1, [0<pipe:[14636364]>], NULL, NULL, NULL, {sigmask=[USR1 USR2], sigsetsize=8}) = 1 (in [0])
+2704543 read(0<pipe:[14636364]>, "", 4096) = 0
+2704543 ftruncate(3</tmp/lab4-wJqD0A>(deleted), 0) = 0
+2704543 kill(2705303, SIGUSR1)          = 0
+2705303 <... rt_sigtimedwait resumed>{si_signo=SIGUSR1, si_code=SI_USER, si_pid=2704543, si_uid=1000}, {tv_sec=1, tv_nsec=0}, 8) = 10 (SIGUSR1)
+2704543 wait4(2705303,  <unfinished ...>
+2705303 fstat(3</tmp/lab4-wJqD0A>(deleted), {st_mode=S_IFREG|0600, st_size=0, ...}) = 0
+2705303 close(4</tmp/tmpuvahnvk3/result.txt>) = 0
+2705303 close(3</tmp/lab4-wJqD0A>(deleted)) = 0
+2705303 exit_group(0)                   = ?
+2705303 +++ exited with 0 +++
+2704543 <... wait4 resumed>[{WIFEXITED(s) && WEXITSTATUS(s) == 0}], WSTOPPED, NULL) = 2705303
+2704543 close(3</tmp/lab4-wJqD0A>(deleted)) = 0
+2704543 exit_group(0)                   = ?
+2704543 +++ exited with 0 +++

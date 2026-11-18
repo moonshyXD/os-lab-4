@@ -1,5 +1,6 @@
 \documentclass[12pt,a4paper]{article}
 \input{preamble}
+\newcommand{\ReportLab}{4}
 \newcommand{\ReportStudent}{В. Е. Авраменко}
 \newcommand{\ReportGroup}{М8О-204БВ-25}
 \newcommand{\ReportTeacher}{Н. А. Гапонов}
@@ -9,14 +10,14 @@
 \begin{document}
 \setlength{\emergencystretch}{3em}
 \input{titlepage}
-\section{Цель и задание}
+\section{Условие}
 Приобрести практические навыки работы с файловой системой и организации обмена данными между процессами через отображаемые в память файлы (File Mapping).
 
 Выполняется вариант 1 из лабораторной работы №2. Родительский процесс получает первой строкой имя выходного файла и запускает отдельную дочернюю программу. Далее пользователь вводит строки целых чисел типа \texttt{int}. Дочерняя программа вычисляет сумму каждой строки и записывает её в указанный файл. Количество чисел в строке произвольное, в пределах ресурсов ОС. Необходимо обрабатывать системные ошибки.
 
 В отличие от ЛР №2, данные между процессами передаются через файловое отображение \texttt{mmap}, а готовность данных и подтверждение обработки обозначаются сигналами. Программы написаны на C11 для Linux. Основой послужили исходники из каталога \texttt{1/src}; функции ввода и вычисления суммы сохранены с небольшими изменениями проверки входа.
 
-\section{Межпроцессное взаимодействие и синхронизация}
+\section{Метод решения}
 \subsection{Схема взаимодействия}
 \begin{terminal}
 Пользователь -> parent -> mmap(MAP_SHARED) -> child -> файл сумм
@@ -41,7 +42,8 @@
 
 Обработчики сигналов не выполняют вычисления или ввод-вывод: используются \texttt{sigwaitinfo} и \texttt{sigtimedwait}. Заблокированный сигнал, пришедший до начала ожидания, остаётся ожидающим. Обычные сигналы могут объединяться, поэтому протокол строго чередует команду и подтверждение. \texttt{MAP\_SHARED} обеспечивает видимость данных обоим процессам; отдельный \texttt{msync} для долговременного сохранения временного файла здесь не требуется.
 
-\section{Структура и читаемость программы}
+\section{Описание программы}
+\subsection{Структура файлов}
 \begin{table}[H]
 \caption{Модули программы}
 \small
@@ -57,7 +59,11 @@
 \end{tabularx}
 \end{table}
 
-\section{Проверка ввода и ошибок}
+\subsection{Основные типы данных и функции}
+
+Структура \texttt{Input} хранит буфер чтения и границы ещё не обработанных данных. \texttt{read\_command\_line} возвращает строку с её длиной или статус окончания ввода. \texttt{publish\_line} записывает строку в отображение, \texttt{map\_line} возвращает адрес отображения и его размер, а \texttt{sum\_line} вычисляет сумму типа \texttt{long} и возвращает статус разбора через выходной параметр. Перечисление \texttt{Status} различает нормальную обработку, конец ввода и ошибки.
+
+\subsection{Проверка ввода и ошибок}
 Каждый элемент строки преобразуется функцией \texttt{strtol} с проверкой \texttt{errno}, конца токена и диапазона \texttt{INT\_MIN..INT\_MAX}. Сумма хранится в \texttt{long}; перед сложением проверяются границы \texttt{LONG\_MIN..LONG\_MAX}. В проверенной среде Linux x86\_64 это позволяет суммировать несколько чисел \texttt{int}, даже если результат выходит за диапазон \texttt{int}.
 
 Строка только из пробельных символов пропускается. Строка с неверным числом не записывается; следующие команды обрабатываются, но итоговый код завершения ненулевой. Пустая строка заканчивает ввод, как в исходной ЛР №2. Встроенные нулевые байты в имени или команде считаются ошибкой.
@@ -66,7 +72,47 @@
 
 Выходной файл открывается на перезапись. При ожидании ввода \texttt{pselect} атомарно снимает блокировку \texttt{SIGCHLD} на время ожидания. Обработчик отмечает получение сигнала, в том числе когда ввод стал доступен одновременно с ним. Вызов \texttt{waitid} проверяет, завершился или остановился потомок, сохраняя статус для \texttt{waitpid}. Ввод читается порциями через \texttt{read}, поэтому даже незаконченная строка не мешает обнаружить отказ. В тестах родитель завершился и забрал статус потомка при открытом входном потоке.
 
-\section{Сборка и пример использования}
+\subsection{Используемые системные вызовы}
+
+Таблица связывает вызовы в исходном коде с их именами в Linux. Во второй колонке отдельно указаны случаи, когда библиотека C оборачивает системный вызов.
+
+\begin{table}[H]
+\small
+\caption{Используемые системные вызовы}
+\begin{tabularx}{\linewidth}{|P{4.1cm}|P{3.6cm}|L|}
+\hline
+\thead{В коде} & \thead{В Linux} & \thead{Назначение} \\ \hline
+\texttt{fork}, \texttt{execv} & \texttt{clone}, \texttt{execve} & Создать процесс и загрузить отдельную программу \texttt{child}. \\ \hline
+\texttt{getpid}, \texttt{getppid} & \texttt{getpid}, \texttt{getppid} & Получить PID родителя и проверить, что он ещё существует как родитель потомка. \\ \hline
+\texttt{mkstemp}, \texttt{fopen} & \texttt{openat} & Создать временный файл обмена и открыть файл результатов. \\ \hline
+\texttt{unlink} & \texttt{unlink} & Удалить имя временного файла, сохранив открытый дескриптор. \\ \hline
+\texttt{ftruncate}, \texttt{fstat} & \texttt{ftruncate}, \texttt{fstat} & Задать размер файла обмена и узнать его в потомке. \\ \hline
+\texttt{mmap}, \texttt{munmap} & \texttt{mmap}, \texttt{munmap} & Отобразить общий файл и снять отображение. \\ \hline
+\texttt{read}, \texttt{fflush} & \texttt{read}, \texttt{write} & Прочитать ввод и записать подготовленный вывод из буфера libc. \\ \hline
+\texttt{close}, \texttt{fclose} & \texttt{close} & Закрыть дескрипторы обмена и результата. \\ \hline
+\texttt{sigprocmask}, \texttt{sigaction} & \texttt{rt\_sigprocmask}, \texttt{rt\_sigaction} & Управлять маской сигналов и установить обработчик. \\ \hline
+\texttt{kill} & \texttt{kill} & Отправить сигнал команды, подтверждения или принудительного завершения. \\ \hline
+\texttt{sigwaitinfo}, \texttt{sigtimedwait} & \texttt{rt\_sigtimedwait} & Принять заблокированный сигнал с данными об отправителе. \\ \hline
+\texttt{pselect} & \texttt{pselect6} & Ждать ввод с временно разблокированным \texttt{SIGCHLD}. \\ \hline
+\texttt{waitid}, \texttt{waitpid} & \texttt{waitid}, \texttt{wait4} & При сбое проверить состояние потомка, а при завершении забрать его статус. \\ \hline
+\texttt{\_exit}, возврат из \texttt{main} & \texttt{exit\_group} & Завершить процесс и передать код выхода. \\ \hline
+\end{tabularx}
+\end{table}
+
+В полном журнале также видны вызовы загрузчика и libc: \texttt{access} и \texttt{pread64} при проверке и чтении библиотек, \texttt{mprotect} при настройке защиты страниц, \texttt{brk} и \texttt{getrandom} при работе аллокатора, \texttt{arch\_prctl}, \texttt{set\_tid\_address}, \texttt{set\_robust\_list} и \texttt{rseq} при инициализации процесса, \texttt{prlimit64} при чтении лимита стека. Они не являются частью обмена строками. \texttt{waitid} используется в ветке отказа потомка и в записанном штатном запуске не вызывается.
+
+\subsection{Ключевые фрагменты кода}
+
+\begin{listingblock}{Запись строки в файловое отображение}
+\inputcode[firstline=79,lastline=90]{../src/mapping.c}
+\end{listingblock}
+
+\begin{listingblock}{Ожидание подтверждения или отказа}
+\inputcode[firstline=28,lastline=49]{../src/mapping.c}
+\end{listingblock}
+
+\section{Результаты}
+\subsection{Сборка и пример использования}
 Команды сборки и запуска:
 \begin{terminal}
 make
@@ -75,66 +121,15 @@ cd src
 \end{terminal}
 Введите имя выходного файла, затем строки с числами. Для завершения введите пустую строку или нажмите \texttt{Ctrl+D}. Запуск выполняется из \texttt{src}, поскольку дочерняя программа вызывается по пути \texttt{./child}.
 
-\section{Демонстрация работы процессов}
+\subsection{PID и результат запуска}
 
-Родитель печатает PID обоих процессов после того, как дочерняя программа открыла файл результатов и подтвердила готовность. В сохранённом запуске PID родителя --- 2508523, PID потомка --- 2508524. Для строк \texttt{1 2 3} и \texttt{10 -5 7} в файле получены соответственно \texttt{6} и \texttt{12}.
+Родитель печатает PID обоих процессов после того, как дочерняя программа открыла файл результатов и подтвердила готовность. В сохранённом запуске PID родителя --- 2704543, PID потомка --- 2705303. Для строк \texttt{1 2 3} и \texttt{10 -5 7} в файле получены соответственно \texttt{6} и \texttt{12}.
 
 \begin{listingblock}{Лог запуска с PID и суммами}
 \inputterminal{inc/demo.txt}
 \end{listingblock}
 
-\subsection{Создание процессов и обмен в strace}
-Фрагмент ниже снят во время запуска из листинга с PID и суммами. В журнале сохранены успешные вызовы, выбранные для проверки обмена.
-
-Как читать строки: первое число --- PID процесса, выполнившего вызов. Сопоставьте его с \texttt{parent PID} и \texttt{child PID} в логе запуска. После знака \texttt{=} указан результат вызова. Например, \texttt{clone} возвращает PID потомка, а \texttt{write} --- количество записанных байтов. Ключ \texttt{-f} включает трассировку потомка, \texttt{-yy} показывает путь файла рядом с его дескриптором, \texttt{-z} выводит успешные вызовы по завершении. Поэтому строка получения сигнала иногда видна раньше строки завершения отправившего его \texttt{kill}.
-
-Номера в таблице относятся к полному журналу \path{inc/ipc-trace.txt}.
-
-\begin{table}[H]
-\small
-\caption{Ключевые строки трассы родителя и дочерней программы}
-\begin{tabularx}{\linewidth}{|P{3.6cm}|P{2cm}|L|}
-\hline
-\thead{Этап} & \thead{Строки} & \thead{Что видно} \\ \hline
-Файл обмена & 21--22 & Родитель создаёт файл с правами \texttt{0600} и удаляет его имя. \\ \hline
-Запуск и готовность & 23--24, 43--45 & \texttt{clone} возвращает PID потомка. Тот выполняет \texttt{execve}, открывает результат и сообщает о готовности. \\ \hline
-Первая команда & 51--62 & Размер 7 байт, два отображения одного файла, запись \texttt{6} и подтверждение \texttt{SIGUSR2}. \\ \hline
-Вторая команда & 63--73 & Размер 9 байт, запись \texttt{12} и подтверждение \texttt{SIGUSR2}. \\ \hline
-Завершение & 75--85 & EOF, размер 0, закрытие дескрипторов и нулевой статус потомка в \texttt{wait4}. \\ \hline
-\end{tabularx}
-\end{table}
-
-\begin{enumerate}
-\item \texttt{openat} с \texttt{O\_CREAT|O\_EXCL} и \texttt{unlink} показывают создание файла обмена и удаление его имени. Дескриптор остаётся открытым и виден с пометкой \texttt{(deleted)}.
-\item \texttt{clone} реализует вызов \texttt{fork} в проверенной среде. Потомок выполняет \texttt{execve("./child", ...)}, открывает файл результатов и отправляет первый \texttt{SIGUSR2} в знак готовности.
-\item Для первой строки \texttt{ftruncate} задаёт 7 байт, включая завершающий ноль. Родитель отображает файл с \texttt{PROT\_READ|PROT\_WRITE} и \texttt{MAP\_SHARED}. Копирование в отображение выполняется в памяти процесса. После \texttt{SIGUSR1} потомок узнаёт размер через \texttt{fstat} и отображает тот же файл с \texttt{PROT\_READ} и \texttt{MAP\_SHARED}.
-\item Вызов \texttt{write} у потомка показывает запись двух байтов: цифры \texttt{6} и перевода строки. Затем потомок снимает отображение и отвечает \texttt{SIGUSR2}. Родитель получает подтверждение до изменения размера файла на 9 байт. Для второй строки в трассе видна запись \texttt{12}.
-\item Размер 0 и очередной \texttt{SIGUSR1} означают конец ввода. Потомок закрывает файл результатов и дескриптор обмена. Родитель получает нулевой статус потомка через \texttt{wait4} (в коде \texttt{waitpid}) и закрывает свой дескриптор.
-\end{enumerate}
-
-В журнале не наблюдается вызовов \texttt{pipe} и \texttt{pipe2} из этих программ. Пометки \texttt{pipe:[...]} у стандартных потоков относятся к подаче ввода и сбору вывода тестом.
-
-\begin{listingblock}{Исходные строки strace для PID 2508523 и 2508524}
-\inputterminal{inc/ipc-excerpt.txt}
-\end{listingblock}
-
-\subsection{Воспроизведение трассировки}
-
-Из корня проекта выполните команду ниже. PID, имя временного файла и номера строк при новом запуске могут измениться.
-
-\begin{listingblock}{Команда запуска под strace}
-\begin{terminal}
-make && cd src
-trace_dir=$(mktemp -d)
-printf '%s\n' "$trace_dir/result.txt" '1 2 3' '10 -5 7' |
-    strace -f -z -yy -s 160 -o "$trace_dir/ipc-trace.txt" ./parent
-cat "$trace_dir/result.txt"
-\end{terminal}
-\end{listingblock}
-
-Эта команда сохраняет успешные системные вызовы обоих процессов. Для получения журнала с тем же набором вызовов, что и в отчёте, используйте фильтр \texttt{-e trace} из \path{README.md}.
-
-\section{Проверки}
+\subsection{Проверки}
 Проверки выполнены в Ubuntu / WSL2, ядро Linux 6.6.87.2-microsoft-standard-WSL2, GCC 13.3.0. Сборка с \texttt{-std=c11 -Wall -Wextra -Wpedantic -Werror} прошла без предупреждений. Интеграционный набор содержит 24 успешных сценария; подробности сохранены в \texttt{inc/test-results.json}.
 
 \begin{table}[H]
@@ -156,6 +151,57 @@ cat "$trace_dir/result.txt"
 
 Ещё 23 сценария выполнены с санитайзерами. Ошибок ASan и UBSan не обнаружено. Трассировка под \texttt{strace} выполнялась отдельно. Результаты сохранены в \path{inc/sanitizer-results.json}.
 
+\section{Демонстрация работы strace}
+Фрагмент ниже снят во время запуска из листинга с PID и суммами. Трасса без фильтров приведена в приложении Б.
+
+Как читать строки: первое число --- PID процесса, выполнившего вызов. Сопоставьте его с \texttt{parent PID} и \texttt{child PID} в логе запуска. После знака \texttt{=} указан результат вызова. Например, \texttt{clone} возвращает PID потомка, а \texttt{write} --- количество записанных байтов. Ключ \texttt{-f} включает трассировку потомка, \texttt{-yy} показывает путь рядом с дескриптором, а \texttt{-s 160} позволяет увидеть команды и результаты целиком. Метки \texttt{<unfinished ...>} и \texttt{<... resumed>} обозначают начало и завершение одного вызова: между ними \texttt{strace} записал события другого процесса.
+
+Номера в таблице относятся к полному журналу \path{inc/ipc-trace.txt}.
+
+\begin{table}[H]
+\small
+\caption{Ключевые строки трассы родителя и дочерней программы}
+\begin{tabularx}{\linewidth}{|P{3.6cm}|P{2cm}|L|}
+\hline
+\thead{Этап} & \thead{Строки} & \thead{Что видно} \\ \hline
+Файл обмена & 36--37 & Родитель создаёт файл с правами \texttt{0600} и удаляет его имя. \\ \hline
+Запуск и готовность & 39--42, 76--79 & \texttt{clone} возвращает PID потомка. Тот выполняет \texttt{execve}, открывает результат и сообщает о готовности. \\ \hline
+Первая команда & 89--103 & Размер 7 байт, два отображения одного файла, запись \texttt{6} и подтверждение \texttt{SIGUSR2}. \\ \hline
+Вторая команда & 104--123 & Размер 9 байт, запись \texttt{12} и подтверждение \texttt{SIGUSR2}. \\ \hline
+Завершение & 124--138 & EOF, размер 0, закрытие дескрипторов и нулевой статус потомка в \texttt{wait4}. \\ \hline
+\end{tabularx}
+\end{table}
+
+\begin{enumerate}
+\item \texttt{openat} с \texttt{O\_CREAT|O\_EXCL} и \texttt{unlink} показывают создание файла обмена и удаление его имени. Дескриптор остаётся открытым и виден с пометкой \texttt{(deleted)}.
+\item В этой среде \texttt{fork} виден как \texttt{clone}. Потомок запускает \texttt{./child} через \texttt{execve}. Затем он открывает файл результатов и отправляет первый \texttt{SIGUSR2} в знак готовности.
+\item Для первой строки \texttt{ftruncate} задаёт 7 байт, включая завершающий ноль. Родитель отображает файл с \texttt{PROT\_READ|PROT\_WRITE} и \texttt{MAP\_SHARED}. Копирование в отображение выполняется в памяти процесса. После \texttt{SIGUSR1} потомок узнаёт размер через \texttt{fstat} и отображает тот же файл с \texttt{PROT\_READ} и \texttt{MAP\_SHARED}.
+\item Вызов \texttt{write} у потомка показывает запись двух байтов: цифры \texttt{6} и перевода строки. Затем потомок снимает отображение и отвечает \texttt{SIGUSR2}. Родитель получает подтверждение до изменения размера файла на 9 байт. Для второй строки в трассе видна запись \texttt{12}.
+\item Размер 0 и очередной \texttt{SIGUSR1} означают конец ввода. Потомок закрывает файл результатов и дескриптор обмена. Родитель получает нулевой статус потомка через \texttt{wait4} (в коде \texttt{waitpid}) и закрывает свой дескриптор.
+\end{enumerate}
+
+В журнале не наблюдается вызовов \texttt{pipe} и \texttt{pipe2} из этих программ. Пометки \texttt{pipe:[...]} у стандартных потоков относятся к подаче ввода и сбору вывода тестом.
+
+\begin{listingblock}{Исходные строки strace для PID 2704543 и 2705303}
+\inputterminal{inc/ipc-excerpt.txt}
+\end{listingblock}
+
+\subsection{Воспроизведение трассировки}
+
+Из корня проекта выполните команду ниже. PID, имя временного файла и номера строк при новом запуске могут измениться.
+
+\begin{listingblock}{Команда запуска под strace}
+\begin{terminal}
+make && cd src
+trace_dir=$(mktemp -d)
+printf '%s\n' "$trace_dir/result.txt" '1 2 3' '10 -5 7' |
+    strace -f -yy -s 160 -o "$trace_dir/ipc-trace.txt" ./parent
+cat "$trace_dir/result.txt"
+\end{terminal}
+\end{listingblock}
+
+Эта команда сохраняет трассу обоих процессов в каталоге \texttt{trace\_dir}. Полный журнал сохранённого запуска находится в приложении Б.
+
 \section{Выводы}
 Реализованы две отдельные программы на C, передающие строки целых чисел через файловое отображение. Сигналы задают порядок чтения и записи; подтверждение после обработки предотвращает перезапись ещё используемых данных. Дочерний процесс вычисляет суммы и сохраняет их в файл. Проверены нормальная работа, длинные команды и основные ошибки ввода-вывода и жизненного цикла процессов.
 
@@ -167,15 +213,53 @@ cat "$trace_dir/result.txt"
 \item Linux man-pages. sigwaitinfo(2). \url{https://man7.org/linux/man-pages/man2/sigwaitinfo.2.html}.
 \end{enumerate}
 
-\appendixsection{А}{Ключевые фрагменты кода}
-\begin{listingblock}{Передача строки через файловое отображение}
-\inputcode[firstline=79,lastline=90]{../src/mapping.c}
+\appendixsection{А}{Исходный код программы}
+\begin{listingblock}{Файл Makefile}
+\inputcode{../Makefile}
 \end{listingblock}
-\begin{listingblock}{Ожидание подтверждения или отказа}
-\inputcode[firstline=28,lastline=49]{../src/mapping.c}
+
+\begin{listingblock}{Файл src/Makefile}
+\inputcode{../src/Makefile}
 \end{listingblock}
-\clearpage
-\begin{listingblock}{Ожидание ввода с обработкой \texttt{SIGCHLD}}
-\inputcode[firstline=57,lastline=77]{../src/parent_input.c}
+
+\begin{listingblock}{Файл src/parent.c}
+\inputcode{../src/parent.c}
+\end{listingblock}
+
+\begin{listingblock}{Файл src/child.c}
+\inputcode{../src/child.c}
+\end{listingblock}
+
+\begin{listingblock}{Файл src/mapping.h}
+\inputcode{../src/mapping.h}
+\end{listingblock}
+
+\begin{listingblock}{Файл src/mapping.c}
+\inputcode{../src/mapping.c}
+\end{listingblock}
+
+\begin{listingblock}{Файл src/parent\_input.h}
+\inputcode{../src/parent_input.h}
+\end{listingblock}
+
+\begin{listingblock}{Файл src/parent\_input.c}
+\inputcode{../src/parent_input.c}
+\end{listingblock}
+
+\begin{listingblock}{Файл src/sum.h}
+\inputcode{../src/sum.h}
+\end{listingblock}
+
+\begin{listingblock}{Файл src/sum.c}
+\inputcode{../src/sum.c}
+\end{listingblock}
+
+\begin{listingblock}{Файл src/status.h}
+\inputcode{../src/status.h}
+\end{listingblock}
+
+\appendixsection{Б}{Полный вывод strace}
+\begin{listingblock}{Вывод strace для запуска из основного текста}
+\inputterminal{inc/ipc-trace.txt}
 \end{listingblock}
 \end{document}

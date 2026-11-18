@@ -66,9 +66,8 @@ result.txt
 make
 cd src
 trace_dir=$(mktemp -d)
-calls='%process,read,write,openat,close,unlink,fstat,newfstatat,ftruncate,mmap,munmap,kill,rt_sigprocmask,rt_sigaction,rt_sigtimedwait,pselect6,waitid,pipe,pipe2'
 printf '%s\n' "$trace_dir/result.txt" '1 2 3' '10 -5 7' |
-    strace -f -z -yy -s 160 -e "trace=$calls" -o "$trace_dir/ipc-trace.txt" ./parent
+    strace -f -yy -s 160 -o "$trace_dir/ipc-trace.txt" ./parent
 cat "$trace_dir/result.txt"
 printf 'Трасса: %s\n' "$trace_dir/ipc-trace.txt"
 ```
@@ -78,8 +77,8 @@ PDF пересобирается командой `make report` из корня 
 и `report/inc/sanitizer-results.json`.
 
 Лог запуска с PID и суммами: `report/inc/demo.txt`.
-Журнал вызовов: `report/inc/ipc-trace.txt`. Ключевые строки тех же PID: `report/inc/ipc-excerpt.txt`.
-Отчёт с пояснениями к трассе: `report/report.pdf`;
+Полная трасса без фильтров: `report/inc/ipc-trace.txt`. Ключевые строки тех же PID: `report/inc/ipc-excerpt.txt`.
+Отчёт с полными исходниками и трассой в приложениях: `report/report.pdf`;
 редактируемый исходник: `report/report.tex`.
 
 Сборка: GCC 13.3.0, Linux x86_64 / WSL2. Проверки на другой ОС не выполнялись.

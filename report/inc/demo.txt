@@ -1,5 +1,5 @@
-$ printf '%s\n' /tmp/lab4-trace-5cosremw/result.txt '1 2 3' '10 -5 7' | ./parent
-parent PID=2508523, child PID=2508524
-$ cat /tmp/lab4-trace-5cosremw/result.txt
+$ printf '%s\n' /tmp/tmpuvahnvk3/result.txt '1 2 3' '10 -5 7' | strace -f -yy -s 160 -o ipc-trace.txt ./parent
+parent PID=2704543, child PID=2705303
+$ cat /tmp/tmpuvahnvk3/result.txt
 6
 12
