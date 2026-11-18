@@ -33,7 +33,6 @@ int prepare_input_wait(sigset_t *input_mask) {
 }
 
 static int check_child(pid_t child) {
-    // Leave the child status for finish_child(), which owns cleanup.
     siginfo_t state = {0};
     int result;
     do {
@@ -56,7 +55,6 @@ static int check_child(pid_t child) {
 
 static int wait_for_input(pid_t child, const sigset_t *input_mask) {
     for (;;) {
-        // SIGCHLD is blocked here. It may have arrived alongside readable input.
         if (child_changed) {
             child_changed = 0;
             if (check_child(child) == -1) {
