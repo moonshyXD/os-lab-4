@@ -69,6 +69,7 @@
 \DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small}
 \DefineVerbatimEnvironment{terminal}{Verbatim}{fontsize=\footnotesize}
 \newcommand{\inputcode}[2][]{\VerbatimInput[fontsize=\small,#1]{#2}}
+\newcommand{\appendixcode}[1]{\inputcode[fontsize=\footnotesize,baselinestretch=1.07]{#1}}
 \newcommand{\inputterminal}[2][]{\VerbatimInput[fontsize=\footnotesize,#1]{#2}}
 % Листинг с подписью сверху:
 %   \begin{listingblock}{Подпись} \begin{code}...\end{code} \end{listingblock}
