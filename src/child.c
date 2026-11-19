@@ -26,6 +26,8 @@ static int process_line(char *line, size_t size, FILE *output, int *result) {
         if (fprintf(output, "%ld\n", sum) < 0 || fflush(output) == EOF) {
             perror("write output");
             io_error = 1;
+        } else if (isatty(STDIN_FILENO) && isatty(STDERR_FILENO)) {
+            fprintf(stderr, "Сумма: %ld\n", sum);
         }
     } else if (status != STATUS_NO_NUMBERS) {
         *result = EXIT_FAILURE;

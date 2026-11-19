@@ -22,7 +22,7 @@ static void start_child(int fd, pid_t parent, char *filename) {
 }
 
 static int send_commands(Input *input, int fd, pid_t parent, pid_t child,
-                         const sigset_t *signals) {
+                         const sigset_t *signals, int interactive) {
     if (wait_for_ack(signals, child) == -1) {
         perror("child readiness");
         return EXIT_FAILURE;
@@ -36,7 +36,14 @@ static int send_commands(Input *input, int fd, pid_t parent, pid_t child,
         perror("write process IDs");
         return EXIT_FAILURE;
     }
+    if (interactive) {
+        fputs("Введите целые числа через пробел, например 1 2 3.\n"
+              "Каждая строка даёт одну сумму. Для выхода нажмите Enter на пустой строке или Ctrl+D.\n", stderr);
+    }
     for (;;) {
+        if (interactive) {
+            fputs("Числа > ", stderr);
+        }
         char *line = NULL;
         size_t length = 0;
         Status status = read_command_line(input, child, &input_mask, &line, &length);
@@ -108,7 +115,7 @@ static int create_mapping_file(void) {
     return fd;
 }
 
-static int run_parent(Input *input, char *filename) {
+static int run_parent(Input *input, char *filename, int interactive) {
     sigset_t signals;
     if (block_ipc_signals(&signals) == -1) {
         perror("block signals");
@@ -127,7 +134,7 @@ static int run_parent(Input *input, char *filename) {
     if (child == -1) {
         perror("fork");
     } else {
-        result = send_commands(input, fd, parent, child, &signals);
+        result = send_commands(input, fd, parent, child, &signals, interactive);
         result = finish_child(child, result);
     }
     if (close(fd) == -1) {
@@ -138,13 +145,21 @@ static int run_parent(Input *input, char *filename) {
 }
 
 int main(void) {
+    int interactive = isatty(STDIN_FILENO) && isatty(STDERR_FILENO);
+    if (interactive) {
+        fputs("Суммирование целых чисел по строкам.\n"
+              "Имя файла для записи результатов (например result.txt) > ", stderr);
+    }
     Input input = {0};
     char *filename = NULL;
     if (read_filename(&input, &filename) != STATUS_OK) {
         fprintf(stderr, "parent: не удалось прочитать имя файла\n");
         return EXIT_FAILURE;
     }
-    int result = run_parent(&input, filename);
+    int result = run_parent(&input, filename, interactive);
+    if (interactive && result == EXIT_SUCCESS) {
+        fprintf(stderr, "\nГотово. Суммы сохранены в файле «%s».\n", filename);
+    }
     free(filename);
     return result;
 }
