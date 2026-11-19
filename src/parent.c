@@ -5,6 +5,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -16,7 +17,24 @@ static void start_child(int fd, pid_t parent, char *filename) {
         fprintf(stderr, "child: не удалось подготовить аргументы запуска\n");
         _exit(EXIT_FAILURE);
     }
-    execv("./child", (char *[]){"./child", filename, descriptor, parent_id, NULL});
+    char path[PATH_MAX];
+    ssize_t length = readlink("/proc/self/exe", path, sizeof(path));
+    if (length == -1) {
+        perror("readlink /proc/self/exe");
+        _exit(EXIT_FAILURE);
+    }
+    if ((size_t)length == sizeof(path)) {
+        fprintf(stderr, "parent: слишком длинный путь к программе\n");
+        _exit(EXIT_FAILURE);
+    }
+    path[length] = '\0';
+    char *slash = strrchr(path, '/');
+    if (slash == NULL || sizeof("child") > sizeof(path) - (size_t)(slash + 1 - path)) {
+        fprintf(stderr, "parent: не удалось составить путь к child\n");
+        _exit(EXIT_FAILURE);
+    }
+    memcpy(slash + 1, "child", sizeof("child"));
+    execv(path, (char *[]){"child", filename, descriptor, parent_id, NULL});
     perror("execv child");
     _exit(EXIT_FAILURE);
 }
